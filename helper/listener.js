@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-commonjs */
 const exec = require('child_process').exec;
+const url = require('url');
+const path = require('path');
 const waitPort = require('wait-port');
 
 const sendCustomStyles = require('./styles');
@@ -8,8 +10,14 @@ const { downloadUpdate, sendVersionInfo } = require('./update');
 const { discoverNodes, stopDiscovery } = require('./discover');
 
 function activateScreenSleepListener(ipcMain) {
-  ipcMain.on('screenControl', (_, screenCommand) => {
-    exec(screenCommand.command);
+  ipcMain.on('screenSleep', () => {
+    exec('xset dpms force standby');
+  });
+
+  ipcMain.on('screenWakeup', () => {
+    exec('xset s off');
+    exec('xset -dpms');
+    exec('xset s noblank');
   });
 }
 
@@ -18,7 +26,13 @@ function activateReloadListener(ipcMain, window, dev) {
     if (dev) {
       window.reload();
     } else {
-      window.loadURL('app://.');
+      window.loadURL(
+        url.format({
+          pathname: path.join(__dirname, '..', 'dist', 'index.html'),
+          protocol: 'file:',
+          slashes: true,
+        }),
+      );
     }
   });
 }
@@ -47,7 +61,7 @@ function activateDiscoverListener(ipcMain, window) {
 }
 
 function activatePortListener(ipcMain, window) {
-  ipcMain.on('checkOctoPrintPort', (_, hostInfo) => {
+  ipcMain.on('checkOctoprintPort', (_, hostInfo) => {
     const waitPortParams = {
       host: hostInfo.host,
       port: hostInfo.port,

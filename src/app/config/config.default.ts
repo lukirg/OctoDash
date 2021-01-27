@@ -2,7 +2,7 @@ import { Config } from './config.model';
 
 export const defaultConfig: Config = {
   octoprint: {
-    url: 'http://localhost:5000/api/',
+    url: 'https://localhost:5000/api/',
     accessToken: '',
   },
   printer: {
@@ -47,10 +47,6 @@ export const defaultConfig: Config = {
     psuControl: {
       enabled: false,
       turnOnPSUWhenExitingSleep: false,
-    },
-    tpLinkSmartPlug: {
-      enabled: false,
-      smartPlugIP: '127.0.0.1',
     },
   },
   octodash: {
@@ -105,10 +101,7 @@ export const defaultConfig: Config = {
     pollingInterval: 2000,
     touchscreen: true,
     turnScreenOffWhileSleeping: false,
-    turnOnPrinterWhenExitingSleep: false,
     preferPreviewWhilePrinting: false,
     previewProgressCircle: false,
-    screenSleepCommand: 'xset dpms force standby',
-    screenWakeupCommand: 'xset s off && xset -dpms && xset s noblank',
   },
 };

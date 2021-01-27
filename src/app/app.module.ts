@@ -24,9 +24,7 @@ import { PluginsComponent } from './config/setup/plugins/plugins.component';
 import { ConfigSetupComponent } from './config/setup/setup.component';
 import { WelcomeComponent } from './config/setup/welcome/welcome.component';
 import { ControlComponent } from './control/control.component';
-import { ChooseFilamentComponent } from './filament/choose-filament/choose-filament.component';
 import { FilamentComponent } from './filament/filament.component';
-import { HeatNozzleComponent } from './filament/heat-nozzle/heat-nozzle.component';
 import { FilesComponent } from './files/files.component';
 import { JobService } from './job.service';
 import { JobStatusComponent } from './job-status/job-status.component';
@@ -44,33 +42,23 @@ import { SettingsComponent } from './settings/settings.component';
 import { StandbyComponent } from './standby/standby.component';
 import { UpdateComponent } from './update/update.component';
 import { URLSafePipe } from './url.pipe';
-import { MoveFilamentComponent } from './filament/move-filament/move-filament.component';
-import { ChangeFilamentComponent } from './filament/change-filament/change-filament.component';
-import { PurgeFilamentComponent } from './filament/purge-filament/purge-filament.component';
-import { CustomActionsComponent } from './control/custom-actions/custom-actions.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BottomBarComponent,
-    ChooseFilamentComponent,
-    ConfigInvalidComponent,
-    ConfigSetupComponent,
     ControlComponent,
-    DiscoverOctoprintComponent,
-    ExtruderInformationComponent,
     FilamentComponent,
     FilesComponent,
+    ConfigInvalidComponent,
     JobStatusComponent,
     LayerProgressComponent,
     LongPress,
     MainMenuComponent,
     MainScreenComponent,
     MainScreenNoTouchComponent,
+    ConfigSetupComponent,
     NotificationComponent,
-    OctoprintAuthenticationComponent,
-    PersonalizationComponent,
-    PluginsComponent,
     PrintControlComponent,
     PrinterStatusComponent,
     SettingsComponent,
@@ -78,23 +66,23 @@ import { CustomActionsComponent } from './control/custom-actions/custom-actions.
     UpdateComponent,
     URLSafePipe,
     WelcomeComponent,
-    HeatNozzleComponent,
-    MoveFilamentComponent,
-    ChangeFilamentComponent,
-    PurgeFilamentComponent,
-    CustomActionsComponent,
+    DiscoverOctoprintComponent,
+    OctoprintAuthenticationComponent,
+    PersonalizationComponent,
+    ExtruderInformationComponent,
+    PluginsComponent,
   ],
   imports: [
-    AppRoutingModule,
-    BrowserAnimationsModule,
     BrowserModule,
-    FontAwesomeModule,
-    FormsModule,
     HttpClientModule,
-    MatRippleModule,
+    AppRoutingModule,
+    RoundProgressModule,
+    FormsModule,
+    FontAwesomeModule,
     NgxElectronModule,
     NgxSpinnerModule,
-    RoundProgressModule,
+    BrowserAnimationsModule,
+    MatRippleModule,
   ],
   providers: [AppService, ConfigService, NotificationService, PrinterService, JobService],
   bootstrap: [AppComponent],

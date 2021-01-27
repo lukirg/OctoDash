@@ -6,8 +6,7 @@ import { OctoprintConnection } from '.././octoprint/model/connection';
 import { AppService } from '../app.service';
 import { ConfigService } from '../config/config.service';
 import { NotificationService } from '../notification/notification.service';
-import { PsuControlService } from '../plugins/psu-control.service';
-import { TPLinkSmartPlugService } from '../plugins/tplink-smartplug.service';
+import { PsuControlService } from '../plugin-service/psu-control.service';
 
 @Component({
   selector: 'app-standby',
@@ -17,7 +16,6 @@ import { TPLinkSmartPlugService } from '../plugins/tplink-smartplug.service';
 export class StandbyComponent implements OnInit {
   public connecting = false;
   public error = '';
-  public actionsVisible = false;
   private connectionRetries = 3;
   private displaySleepTimeout: ReturnType<typeof setTimeout>;
 
@@ -28,7 +26,6 @@ export class StandbyComponent implements OnInit {
     private service: AppService,
     private notificationService: NotificationService,
     private psuControlService: PsuControlService,
-    private tpLinkSmartPlugService: TPLinkSmartPlugService,
   ) {}
 
   public ngOnInit(): void {
@@ -40,12 +37,8 @@ export class StandbyComponent implements OnInit {
 
   public reconnect(): void {
     this.connecting = true;
-    if (this.configService.getAutomaticPrinterPowerOn()) {
-      if (this.configService.useTpLinkSmartPlug()) {
-        this.tpLinkSmartPlugService.changePowerState(true);
-      } else {
-        this.psuControlService.changePSUState(true);
-      }
+    if (this.configService.turnOnPSUWhenExitingSleep()) {
+      this.psuControlService.changePSUState(true);
       setTimeout(this.checkConnection.bind(this), 5000);
     } else {
       this.checkConnection();
@@ -122,10 +115,6 @@ export class StandbyComponent implements OnInit {
       this.notificationService.enableNotifications();
       this.router.navigate(['/main-screen']);
     }, 1000);
-  }
-
-  public toggleCustomActions(): void {
-    this.actionsVisible = !this.actionsVisible;
   }
 }
 

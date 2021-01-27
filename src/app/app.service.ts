@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import _ from 'lodash';
 import { ElectronService } from 'ngx-electron';
 
-import { Config } from './config/config.model';
 import { ConfigService } from './config/config.service';
 import { NotificationService } from './notification/notification.service';
 
@@ -11,7 +9,7 @@ import { NotificationService } from './notification/notification.service';
   providedIn: 'root',
 })
 export class AppService {
-  private updateError: Record<string, (config: Config) => void>;
+  private updateError: string[];
   private loadedFile = false;
   public version: string;
   public latestVersion: string;
@@ -27,39 +25,19 @@ export class AppService {
     this.enableVersionListener();
     this.enableCustomCSSListener();
     this.electronService.ipcRenderer.send('appInfo');
-
-    // list of all error following an upgrade
-    this.updateError = {
-      ".printer should have required property 'zBabystepGCode'": config => (config.printer.zBabystepGCode = 'M290 Z'),
-      ".plugins should have required property 'tpLinkSmartPlug'": config =>
-        (config.plugins.tpLinkSmartPlug = { enabled: true, smartPlugIP: '127.0.0.1' }),
-      ".octodash should have required property 'previewProgressCircle'": config =>
-        (config.octodash.previewProgressCircle = false),
-      ".octodash should have required property 'turnOnPrinterWhenExitingSleep'": config => {
-        config.octodash.turnOnPrinterWhenExitingSleep = config.plugins.psuControl.turnOnPSUWhenExitingSleep ?? false;
-        delete config.plugins.psuControl.turnOnPSUWhenExitingSleep;
-      },
-      ".octodash should have required property 'screenSleepCommand'": config =>
-        (config.octodash.screenSleepCommand = 'xset dpms force standby'),
-      ".octodash should have required property 'screenWakeupCommand'": config =>
-        (config.octodash.screenWakeupCommand = 'xset s off && xset -dpms && xset s noblank'),
-    };
+    this.updateError = [
+      ".printer should have required property 'zBabystepGCode'",
+      ".octodash should have required property 'previewProgressCircle'",
+    ];
   }
 
-  // If all errors can be automatically fixed return true here
-  public fixUpdateErrors(errors: string[]): boolean {
+  // If the errors can be automatically fixed return true here
+  public autoFixError(): boolean {
     const config = this.configService.getCurrentConfig();
-
-    let fullyAutofixed = true;
-    for (const error of errors) {
-      if (_.hasIn(this.updateError, error)) {
-        this.updateError[error](config);
-      } else {
-        fullyAutofixed = false;
-      }
-    }
+    config.printer.zBabystepGCode = 'M290 Z';
+    config.octodash.previewProgressCircle = false;
     this.configService.saveConfig(config);
-    return fullyAutofixed;
+    return true;
   }
 
   private enableVersionListener(): void {
@@ -104,15 +82,15 @@ export class AppService {
   }
 
   public turnDisplayOff(): void {
-    this.electronService.ipcRenderer.send('screenControl', { command: this.configService.getScreenSleepCommand() });
+    this.electronService.ipcRenderer.send('screenSleep');
   }
 
   public turnDisplayOn(): void {
-    this.electronService.ipcRenderer.send('screenControl', { command: this.configService.getScreenWakeupCommand() });
+    this.electronService.ipcRenderer.send('screenWakeup');
   }
 
-  public hasUpdateError(errors: string[]): boolean {
-    return _.intersection(errors, _.keys(this.updateError)).length > 0;
+  public getUpdateError(): string[] {
+    return this.updateError;
   }
 
   public setLoadedFile(value: boolean): void {

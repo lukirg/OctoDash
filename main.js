@@ -3,25 +3,23 @@
 
 require('v8-compile-cache');
 
-const { app, BrowserWindow, ipcMain, protocol, screen, session } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const url = require('url');
 
 const args = process.argv.slice(1);
 const big = args.some(val => val === '--big');
 const dev = args.some(val => val === '--serve');
-const scheme = 'app';
 
 const activateListeners = require('./helper/listener');
-const createProtocol = require('./helper/protocol');
-
-protocol.registerSchemesAsPrivileged([{ scheme: scheme, privileges: { standard: true } }]);
-createProtocol(scheme, path.join(__dirname, 'dist'));
 
 app.commandLine.appendSwitch('touch-events', 'enabled');
 
 let window;
 
 function createWindow() {
+  const { screen, session } = require('electron');
+
   if (!dev) {
     session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
       callback({
@@ -37,8 +35,8 @@ function createWindow() {
   const mainScreen = screen.getPrimaryDisplay();
 
   window = new BrowserWindow({
-    width: dev ? (big ? 1500 : 1200) : mainScreen.size.width,
-    height: dev ? (big ? 600 : 450) : mainScreen.size.height,
+    width: dev ? (big ? 1360 : 1080) : mainScreen.size.width,
+    height: dev ? (big ? 502 : 342) : mainScreen.size.height,
     frame: dev,
     backgroundColor: '#353b48',
     webPreferences: {
@@ -54,7 +52,13 @@ function createWindow() {
     window.loadURL('http://localhost:4200');
     window.webContents.openDevTools();
   } else {
-    window.loadURL('app://.');
+    window.loadURL(
+      url.format({
+        pathname: path.join(__dirname, 'dist', 'index.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
     window.setFullScreen(true);
   }
 

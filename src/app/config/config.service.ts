@@ -80,7 +80,7 @@ export class ConfigService {
 
   public getErrors(): string[] {
     const errors = [];
-    this.validator.errors?.forEach((error): void => {
+    this.validator.errors.forEach((error): void => {
       if (error.keyword === 'type') {
         errors.push(`${error.dataPath} ${error.message}`);
       } else {
@@ -97,7 +97,6 @@ export class ConfigService {
       const configStored = this.store.get('config');
       if (this.validateGiven(configStored)) {
         this.config = config;
-        this.valid = true;
         this.generateHttpHeaders();
         return null;
       } else {
@@ -121,9 +120,9 @@ export class ConfigService {
   public mergeOctoprintURL(urlSplit: URLSplit): string {
     // TODO: remove api/ from URL for v2.2.0
     if (urlSplit.port !== null || !isNaN(urlSplit.port)) {
-      return `http://${urlSplit.host}:${urlSplit.port}/api/`;
+      return `https://${urlSplit.host}:${urlSplit.port}/api/`;
     } else {
-      return `http://${urlSplit.host}/api/`;
+      return `https://${urlSplit.host}/api/`;
     }
   }
 
@@ -194,17 +193,10 @@ export class ConfigService {
     return this.config.octodash.turnScreenOffWhileSleeping;
   }
 
-  public getAutomaticPrinterPowerOn(): boolean {
-    return this.config.octodash.turnOnPrinterWhenExitingSleep;
+  public turnOnPSUWhenExitingSleep(): boolean {
+    return this.config.plugins.psuControl.turnOnPSUWhenExitingSleep;
   }
 
-  public useTpLinkSmartPlug(): boolean {
-    return this.config.plugins.tpLinkSmartPlug.enabled;
-  }
-
-  public getSmartPlugIP(): string {
-    return this.config.plugins.tpLinkSmartPlug.smartPlugIP;
-  }
   public getFilamentThickness(): number {
     return this.config.filament.thickness;
   }
@@ -275,13 +267,5 @@ export class ConfigService {
 
   public getPreviewProgressCircle(): boolean {
     return this.config.octodash.previewProgressCircle;
-  }
-
-  public getScreenSleepCommand(): string {
-    return this.config.octodash.screenSleepCommand;
-  }
-
-  public getScreenWakeupCommand(): string {
-    return this.config.octodash.screenWakeupCommand;
   }
 }

@@ -111,7 +111,6 @@ export const configSchema = {
         'preheatButton',
         'printTimeGenius',
         'psuControl',
-        'tpLinkSmartPlug',
       ],
       properties: {
         displayLayerProgress: {
@@ -187,26 +186,15 @@ export const configSchema = {
         psuControl: {
           $id: '#/properties/plugins/properties/psuControl',
           type: 'object',
-          required: ['enabled'],
+          required: ['enabled', 'turnOnPSUWhenExitingSleep'],
           properties: {
             enabled: {
               $id: '#/properties/plugins/properties/printTimeGenius/properties/enabled',
               type: 'boolean',
             },
-          },
-        },
-        tpLinkSmartPlug: {
-          $id: '#/properties/plugins/properties/tpLinkSmartPlug',
-          type: 'object',
-          required: ['enabled', 'smartPlugIP'],
-          properties: {
-            enabled: {
-              $id: '#/properties/plugins/properties/tpLinkSmartPlug/properties/enabled',
+            turnOnPSUWhenExitingSleep: {
+              $id: '#/properties/plugins/properties/turnOnPSUWhenExitingSleep',
               type: 'boolean',
-            },
-            smartPlugIP: {
-              $id: '#/properties/plugins/properties/tpLinkSmartPlug/properties/smartPlugIP',
-              type: 'string',
             },
           },
         },
@@ -221,11 +209,8 @@ export const configSchema = {
         'pollingInterval',
         'touchscreen',
         'turnScreenOffWhileSleeping',
-        'turnOnPrinterWhenExitingSleep',
         'preferPreviewWhilePrinting',
         'previewProgressCircle',
-        'screenSleepCommand',
-        'screenWakeupCommand',
       ],
       properties: {
         customActions: {
@@ -291,10 +276,6 @@ export const configSchema = {
           $id: '#/properties/octodash/properties/turnScreenOffWhileSleeping',
           type: 'boolean',
         },
-        turnOnPrinterWhenExitingSleep: {
-          $id: '#/properties/octodash/properties/turnOnPrinterWhenExitingSleep',
-          type: 'boolean',
-        },
         preferPreviewWhilePrinting: {
           $id: '#/properties/octodash/properties/preferPreviewWhilePrinting',
           type: 'boolean',
@@ -302,16 +283,6 @@ export const configSchema = {
         previewProgressCircle: {
           $id: '#/properties/octodash/properties/previewProgressCircle',
           type: 'boolean',
-        },
-        screenSleepCommand: {
-          $id: '#/properties/octodash/properties/screenSleepCommand',
-          type: 'string',
-          pattern: '^(.*)$',
-        },
-        screenWakeupCommand: {
-          $id: '#/properties/octodash/properties/screenWakeupCommand',
-          type: 'string',
-          pattern: '^(.*)$',
         },
       },
     },

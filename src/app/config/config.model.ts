@@ -54,7 +54,6 @@ interface Plugins {
   preheatButton: Plugin;
   printTimeGenius: Plugin;
   psuControl: PSUControlPlugin;
-  tpLinkSmartPlug: TPLinkSmartPlugPlugin;
 }
 
 interface Plugin {
@@ -68,13 +67,7 @@ interface EnclosurePlugin extends Plugin {
 }
 
 interface PSUControlPlugin extends Plugin {
-  // TODO: this option still exists to allow migration path... need to be removed
-  // when the new `turnOnPSUWhenExitingSleep` will be released
-  turnOnPSUWhenExitingSleep?: boolean;
-}
-
-interface TPLinkSmartPlugPlugin extends Plugin {
-  smartPlugIP: string;
+  turnOnPSUWhenExitingSleep: boolean;
 }
 
 interface OctoDash {
@@ -83,11 +76,8 @@ interface OctoDash {
   pollingInterval: number;
   touchscreen: boolean;
   turnScreenOffWhileSleeping: boolean;
-  turnOnPrinterWhenExitingSleep: boolean;
   preferPreviewWhilePrinting: boolean;
   previewProgressCircle: boolean;
-  screenSleepCommand: string;
-  screenWakeupCommand: string;
 }
 
 export interface CustomAction {

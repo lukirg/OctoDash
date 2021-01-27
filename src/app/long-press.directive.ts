@@ -35,6 +35,7 @@ export class LongPress {
   }
 
   @HostListener('touchend', ['$event'])
+  @HostListener('touchmove', ['$event'])
   @HostListener('touchcancel', ['$event'])
   endPress(event: EventSource): void {
     clearTimeout(this.timeout);
@@ -42,14 +43,6 @@ export class LongPress {
     if (!this.longPressing && this.pressing) {
       this.onShortPress.emit(event);
     }
-    this.longPressing = false;
-    this.pressing = false;
-  }
-
-  @HostListener('touchmove', ['$event'])
-  endPressMove(_: EventSource): void {
-    clearTimeout(this.timeout);
-    clearInterval(this.interval);
     this.longPressing = false;
     this.pressing = false;
   }

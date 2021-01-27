@@ -60,7 +60,8 @@ export class FilesService {
                   type: 'folder',
                   path: '/' + fileOrFolder.origin + '/' + fileOrFolder.path,
                   name: fileOrFolder.name,
-                  size: this.service.convertByteToMegabyte(fileOrFolder.size),
+                  // TODO: Think of a way to retrieve number of children
+                  files: fileOrFolder.children ? fileOrFolder.children.length : '-',
                 } as unknown) as Folder);
               } else if (fileOrFolder.typePath.includes('gcode')) {
                 let filamentLength = 0;
@@ -258,14 +259,14 @@ export interface Folder {
   type: string;
   path: string;
   name: string;
-  size: string;
+  files?: number;
 }
 
 export interface File {
   type: string;
   path: string;
   name: string;
-  size: string;
+  size?: string;
   printTime?: string;
   filamentWeight?: number;
   date?: string;

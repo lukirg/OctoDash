@@ -1,4 +1,4 @@
-# NOX theme V0.2
+# NOX theme V0.1
 
 I suggest setting the thumbnail resolution in PrusaSlicer a little bit higher (at least 50%):
 
@@ -6,25 +6,16 @@ I suggest setting the thumbnail resolution in PrusaSlicer a little bit higher (a
 thumbnails = 16x16,330x186
 ```
 
-You also need to activate this setting in OctoDash:
+You also need to activate these settings in OctoDash:
 
 **Settings > OctoDash > Preview by default while printing**
-
-If you want to use the round progress bar:
-
 **Settings > OctoDash > Always use circular progress bar**
 
 ### Screenshots:
 
-1a. Printing Screen (progress bar):
+1. Printing Screen:
 
-   ![Printing screen 1](screenshots/screenshot_printing1.png)
-
-
-1b. Printing Screen (round progress bar):
-
-   ![Printing screen 2](screenshots/screenshot_printing2.png)
-
+   ![Printing screen](screenshots/screenshot_printing.png)
 
 2. Main Screen:
 
